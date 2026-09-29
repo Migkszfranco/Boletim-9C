@@ -1,0 +1,186 @@
+/* ===== Reset básico ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== Variáveis de cores (fáceis de mudar depois) ===== */
+:root {
+  --fundo: #0e1116;          /* fundo escuro principal */
+  --fundo-card: #171c24;     /* fundo dos cards e tabela */
+  --ciano: #22d3ee;          /* cor principal */
+  --branco: #f5f7fa;         /* cor secundária (textos) */
+  --cinza: #8a94a6;          /* textos suaves */
+  --borda: #232a34;          /* bordas discretas */
+  --bom: #22d3ee;            /* situação "Bom desempenho" */
+  --atencao: #f59e0b;        /* situação "Atenção" */
+}
+
+/* ===== Corpo da página ===== */
+body {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background-color: var(--fundo);
+  color: var(--branco);
+  line-height: 1.5;
+  padding: 20px;
+}
+
+/* ===== Cabeçalho ===== */
+header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+header h1 {
+  font-size: 2.2rem;
+  color: var(--ciano);
+  letter-spacing: 1px;
+}
+
+.subtitulo {
+  color: var(--cinza);
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+/* ===== Área dos cards de resumo ===== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+/* ===== Card individual com borda arco-íris ===== */
+.card {
+  position: relative;
+  background-color: var(--fundo-card);
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* A borda arco-íris é feita com um pseudo-elemento por trás do card */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -2px; /* borda ao redor */
+  background: linear-gradient(90deg, #ff0000, #ff8c00, #ffee00, #00ff88, #00cfff, #7b5cff, #ff00c8, #ff0000);
+  background-size: 300% 300%;
+  border-radius: 16px;
+  z-index: -2;
+  animation: rgb 6s linear infinite;
+}
+
+/* Uma "máscara" interna para dar efeito de borda fina */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--fundo-card);
+  border-radius: 14px;
+  z-index: -1;
+}
+
+/* Animação do arco-íris */
+@keyframes rgb {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 300% 50%; }
+}
+
+.card h3 {
+  font-size: 0.9rem;
+  color: var(--cinza);
+  font-weight: 500;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card .valor {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: var(--ciano);
+}
+
+/* ===== Tabela ===== */
+.tabela-area h2 {
+  color: var(--branco);
+  margin-bottom: 12px;
+  font-size: 1.3rem;
+}
+
+/* Envolve a tabela para permitir rolagem horizontal em telas pequenas */
+.tabela-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--borda);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px; /* garante que não fique apertada demais */
+}
+
+thead {
+  background-color: #10151c;
+}
+
+th, td {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 0.95rem;
+  border-bottom: 1px solid var(--borda);
+  white-space: nowrap;
+}
+
+th {
+  color: var(--ciano);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+
+td {
+  color: var(--branco);
+}
+
+tbody tr:hover {
+  background-color: #1b222c;
+}
+
+/* Situações coloridas */
+.situacao-bom {
+  color: var(--bom);
+  font-weight: 600;
+}
+
+.situacao-atencao {
+  color: var(--atencao);
+  font-weight: 600;
+}
+
+.situacao-sem-nota {
+  color: var(--cinza);
+  font-style: italic;
+}
+
+/* ===== Rodapé ===== */
+footer {
+  text-align: center;
+  color: var(--cinza);
+  font-size: 0.85rem;
+  margin-top: 30px;
+}
+
+/* ===== Ajustes para celular ===== */
+@media (max-width: 600px) {
+  header h1 { font-size: 1.7rem; }
+  .card .valor { font-size: 1.3rem; }
+  th, td { padding: 10px; font-size: 0.85rem; }
+}
