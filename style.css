@@ -15,6 +15,8 @@
   --borda: #232a34;          /* bordas discretas */
   --bom: #22d3ee;            /* situação "Bom desempenho" */
   --atencao: #f59e0b;        /* situação "Atenção" */
+  --erro: #ef4444;           /* mensagens de erro */
+  --sucesso: #10b981;        /* mensagens de sucesso */
 }
 
 /* ===== Corpo da página ===== */
@@ -42,6 +44,146 @@ header h1 {
   color: var(--cinza);
   font-size: 1rem;
   margin-top: 5px;
+}
+
+/* ===== Área de Login / PIN ===== */
+.login-area {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.login-box {
+  background-color: var(--fundo-card);
+  border: 1px solid var(--borda);
+  border-radius: 14px;
+  padding: 24px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+}
+
+.login-box h2 {
+  font-size: 1.2rem;
+  color: var(--ciano);
+  margin-bottom: 15px;
+}
+
+.info-aluno {
+  display: flex;
+  justify-content: space-around;
+  background-color: #10151c;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  color: var(--cinza);
+}
+
+.info-aluno strong {
+  color: var(--branco);
+}
+
+.campo-login {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.campo-login label {
+  font-size: 0.85rem;
+  color: var(--cinza);
+}
+
+.campo-login input {
+  background-color: #10151c;
+  border: 1px solid var(--borda);
+  color: var(--branco);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.campo-login input:focus {
+  border-color: var(--ciano);
+}
+
+.campo-login button, .btn-acao {
+  background-color: var(--ciano);
+  color: #0e1116;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: opacity 0.2s;
+}
+
+.campo-login button:hover, .btn-acao:hover {
+  opacity: 0.9;
+}
+
+.mensagem {
+  margin-top: 12px;
+  font-size: 0.85rem;
+  color: var(--erro);
+  min-height: 20px;
+}
+
+/* ===== Ações da Tabela ===== */
+.acoes-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.btn-salvar {
+  background-color: var(--sucesso);
+  color: #ffffff;
+}
+
+.mensagem-status {
+  font-size: 0.9rem;
+  color: var(--cinza);
+}
+
+.mensagem-status.sucesso {
+  color: var(--sucesso);
+}
+
+.mensagem-status.erro {
+  color: var(--erro);
+}
+
+/* ===== Inputs na Tabela para Edição ===== */
+.input-nota, .input-falta {
+  background-color: #10151c;
+  border: 1px solid var(--borda);
+  color: var(--branco);
+  padding: 6px 8px;
+  border-radius: 6px;
+  width: 60px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.input-nota:focus, .input-falta:focus {
+  border-color: var(--ciano);
+  outline: none;
+}
+
+.input-invalido {
+  border-color: var(--erro) !important;
+  background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+.grupo-faltas {
+  display: flex;
+  gap: 4px;
 }
 
 /* ===== Área dos cards de resumo ===== */
@@ -183,4 +325,5 @@ footer {
   header h1 { font-size: 1.7rem; }
   .card .valor { font-size: 1.3rem; }
   th, td { padding: 10px; font-size: 0.85rem; }
+  .acoes-area { flex-direction: column; align-items: flex-start; }
 }

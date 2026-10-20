@@ -11,38 +11,67 @@
   <!-- Cabeçalho com título e subtítulo -->
   <header>
     <h1>Boletim Digital</h1>
-    <p class="subtitulo">9º Ano — Estudante Exemplo</p>
+    <p class="subtitulo">9º Ano — Turma 9C — Chamada 26</p>
   </header>
 
   <main>
-    <!-- Área dos cards de resumo (serão preenchidos pelo JavaScript) -->
-    <section class="cards" id="cards-resumo">
-      <!-- Os cards serão inseridos aqui automaticamente -->
-    </section>
-
-    <!-- Área da tabela de disciplinas -->
-    <section class="tabela-area">
-      <h2>Notas por Disciplina</h2>
-
-      <div class="tabela-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th>Disciplina</th>
-              <th>1º Tri</th>
-              <th>2º Tri</th>
-              <th>3º Tri</th>
-              <th>Média</th>
-              <th>Faltas</th>
-              <th>Situação</th>
-            </tr>
-          </thead>
-          <tbody id="corpo-tabela">
-            <!-- As linhas serão inseridas aqui pelo JavaScript -->
-          </tbody>
-        </table>
+    <!-- Área de Login / PIN -->
+    <section class="login-area" id="area-login">
+      <div class="login-box">
+        <h2>Acesso ao Boletim</h2>
+        <div class="info-aluno">
+          <p><strong>Turma:</strong> 9C</p>
+          <p><strong>Chamada:</strong> 26</p>
+        </div>
+        <div class="campo-login">
+          <label for="input-pin">Digite seu PIN:</label>
+          <input type="password" id="input-pin" maxlength="10" placeholder="••••" />
+          <button type="button" id="btn-entrar">Entrar</button>
+        </div>
+        <p id="msg-login" class="mensagem"></p>
       </div>
     </section>
+
+    <!-- Conteúdo do Boletim (Oculto antes do login) -->
+    <div id="conteudo-boletim" style="display: none;">
+      
+      <!-- Ações (Editar / Salvar) -->
+      <section class="acoes-area">
+        <button type="button" id="btn-alterar" class="btn-acao">Alterar dados</button>
+        <button type="button" id="btn-salvar" class="btn-acao btn-salvar" style="display: none;">Salvar alterações</button>
+        <span id="msg-status" class="mensagem-status"></span>
+      </section>
+
+      <!-- Área dos cards de resumo (serão preenchidos pelo JavaScript) -->
+      <section class="cards" id="cards-resumo">
+        <!-- Os cards serão inseridos aqui automaticamente -->
+      </section>
+
+      <!-- Área da tabela de disciplinas -->
+      <section class="tabela-area">
+        <h2>Notas por Disciplina</h2>
+
+        <div class="tabela-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Disciplina</th>
+                <th>1º Tri</th>
+                <th>2º Tri</th>
+                <th>3º Tri</th>
+                <th>Média</th>
+                <th>Faltas</th>
+                <th>Situação</th>
+              </tr>
+            </thead>
+            <tbody id="corpo-tabela">
+              <!-- As linhas serão inseridas aqui pelo JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
   </main>
 
   <!-- Rodapé simples -->
