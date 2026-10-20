@@ -419,4 +419,82 @@ async function salvarAlteracoes() {
     if (!res.valido) {
       input.classList.add("input-invalido");
       possuiErro = true;
-    } else
+    } else {
+      if (!Array.isArray(copiaDisciplinas[idx].faltas)) {
+        copiaDisciplinas[idx].faltas = [0, 0, 0];
+      }
+      copiaDisciplinas[idx].faltas[faltaIdx] = res.valor;
+    }
+  });
+
+  if (possuiErro) {
+    msgStatus.className = "mensagem-status erro";
+    msgStatus.textContent = "Por favor, corrija os campos marcados em vermelho.";
+    return;
+  }
+
+  msgStatus.textContent = "Salvando...";
+
+  try {
+    const resposta = await fetch(`${CONFIG_ALUNO.apiUrl}/api/v1/boletins/salvar`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        turma: CONFIG_ALUNO.turma,
+        numero_chamada: CONFIG_ALUNO.numeroChamada,
+        pin: pinSessao,
+        dados: {
+          disciplinas: copiaDisciplinas
+        }
+      })
+    });
+
+    if (!resposta.ok) {
+      msgStatus.className = "mensagem-status erro";
+      msgStatus.textContent = "Erro ao salvar alterações. Tente novamente.";
+      return;
+    }
+
+    listaDisciplinas = copiaDisciplinas;
+    modoEdicao = false;
+    document.getElementById("btn-salvar").style.display = "none";
+    document.getElementById("btn-alterar").textContent = "Alterar dados";
+
+    msgStatus.className = "mensagem-status sucesso";
+    msgStatus.textContent = "Dados salvos com sucesso.";
+    atualizarTela();
+
+  } catch (erro) {
+    msgStatus.className = "mensagem-status erro";
+    msgStatus.textContent = "Não foi possível conectar ao servidor. Mantenha os dados e tente novamente.";
+  }
+}
+
+/* ---------------------------------------------------------
+   🚀 INICIALIZAÇÃO E EVENTOS
+   --------------------------------------------------------- */
+document.getElementById("btn-entrar").addEventListener("click", abrirBoletim);
+
+document.getElementById("input-pin").addEventListener("keypress", (e) => {
+  if (e.key === "Enter") abrirBoletim();
+});
+
+document.getElementById("btn-alterar").addEventListener("click", () => {
+  modoEdicao = !modoEdicao;
+  const btnSalvar = document.getElementById("btn-salvar");
+  const btnAlterar = document.getElementById("btn-alterar");
+  const msgStatus = document.getElementById("msg-status");
+
+  msgStatus.textContent = "";
+
+  if (modoEdicao) {
+    btnAlterar.textContent = "Cancelar edição";
+    btnSalvar.style.display = "inline-block";
+  } else {
+    btnAlterar.textContent = "Alterar dados";
+    btnSalvar.style.display = "none";
+  }
+  atualizarTela();
+});
+
+document.getElementById("btn-salvar").addEventListener("click", salvarAlteracoes);
