@@ -327,3 +327,88 @@ footer {
   th, td { padding: 10px; font-size: 0.85rem; }
   .acoes-area { flex-direction: column; align-items: flex-start; }
 }
+
+/* =========================================================
+   📊 ÁREA DE GRÁFICOS (NOVO ESTILO)
+   ========================================================= */
+.area-graficos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.grafico-card {
+  background-color: var(--fundo-card);
+  border: 1px solid var(--borda);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.grafico-card h2 {
+  font-size: 1rem;
+  color: var(--branco);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.grafico-header-faltas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.grafico-header-faltas h2 {
+  margin-bottom: 0;
+}
+
+.badge-perigo {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: var(--erro);
+  border: 1px solid var(--erro);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.grafico-card.card-perigo {
+  border-color: var(--erro);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
+}
+
+.grafico-container {
+  position: relative;
+  flex: 1;
+  min-height: 260px;
+  width: 100%;
+}
+
+/* Breakpoint para Tablet */
+@media (max-width: 992px) {
+  .area-graficos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .grafico-card:last-child {
+    grid-column: span 2;
+  }
+}
+
+/* Breakpoint para Celular */
+@media (max-width: 600px) {
+  .area-graficos {
+    grid-template-columns: 1fr;
+  }
+  .grafico-card:last-child {
+    grid-column: span 1;
+  }
+  .grafico-container {
+    min-height: 240px;
+  }
+}
