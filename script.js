@@ -16,6 +16,13 @@ let pinSessao = "";
 let modoEdicao = false;
 
 /* ---------------------------------------------------------
+   📊 INSTÂNCIAS DOS GRÁFICOS (SOMENTE LEITURA)
+   --------------------------------------------------------- */
+let graficoMedias = null;
+let graficoEvolucao = null;
+let graficoFaltas = null;
+
+/* ---------------------------------------------------------
    📚 DADOS BRUTOS PADRÃO DAS DISCIPLINAS (LOCAL)
    --------------------------------------------------------- */
 const disciplinasPadrao = [
@@ -123,6 +130,217 @@ function obterDisciplinasProcessadas() {
       situacao
     };
   });
+}
+
+/* ---------------------------------------------------------
+   📈 FUNÇÕES EXCLUSIVAS DOS GRÁFICOS (SOMENTE LEITURA)
+   --------------------------------------------------------- */
+function atualizarGraficoMedias() {
+  const ctx = document.getElementById("graficoMediasDisciplinas");
+  if (!ctx) return;
+
+  if (graficoMedias) {
+    graficoMedias.destroy();
+  }
+
+  const processadas = obterDisciplinasProcessadas();
+  const rigaDisciplinas = processadas.map((d) => d.disciplina);
+  const rigaMedias = processadas.map((d) => d.media);
+
+  graficoMedias = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: rigaDisciplinas,
+      datasets: [
+        {
+          label: "Média",
+          data: rigaMedias,
+          backgroundColor: "#22d3ee",
+          borderRadius: 4
+        }
+      ]
+    },
+    options: {
+      indexAxis: "y",
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          min: 0,
+          max: 10,
+          ticks: { color: "#8a94a6" },
+          grid: { color: "#232a34" }
+        },
+        y: {
+          ticks: { color: "#f5f7fa", font: { size: 11 } },
+          grid: { display: false }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const val = context.raw;
+              if (val === null || val === undefined) return " Sem nota";
+              return ` Média: ${val.toFixed(1).replace(".", ",")}`;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+function atualizarGraficoEvolucao() {
+  const ctx = document.getElementById("graficoEvolucaoTrimestres");
+  if (!ctx) return;
+
+  if (graficoEvolucao) {
+    graficoEvolucao.destroy();
+  }
+
+  const processadas = obterDisciplinasProcessadas();
+
+  const notasTri1 = processadas.map((d) => d.n1).filter((n) => n !== null);
+  const notasTri2 = processadas.map((d) => d.n2).filter((n) => n !== null);
+  const notasTri3 = processadas.map((d) => d.n3).filter((n) => n !== null);
+
+  const medTri1 = notasTri1.length > 0 ? notasTri1.reduce((a, b) => a + b, 0) / notasTri1.length : null;
+  const medTri2 = notasTri2.length > 0 ? notasTri2.reduce((a, b) => a + b, 0) / notasTri2.length : null;
+  const medTri3 = notasTri3.length > 0 ? notasTri3.reduce((a, b) => a + b, 0) / notasTri3.length : null;
+
+  graficoEvolucao = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: ["1º Tri", "2º Tri", "3º Tri"],
+      datasets: [
+        {
+          label: "Média Geral",
+          data: [medTri1, medTri2, medTri3],
+          borderColor: "#22d3ee",
+          backgroundColor: "rgba(34, 211, 238, 0.15)",
+          borderWidth: 3,
+          fill: true,
+          tension: 0.3,
+          pointRadius: 6,
+          pointBackgroundColor: "#22d3ee"
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          min: 0,
+          max: 10,
+          ticks: { color: "#8a94a6" },
+          grid: { color: "#232a34" }
+        },
+        x: {
+          ticks: { color: "#f5f7fa" },
+          grid: { color: "#232a34" }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const val = context.raw;
+              if (val === null || val === undefined) return " Média: Indisponível";
+              return ` Média Geral: ${val.toFixed(1).replace(".", ",")}`;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+function atualizarGraficoFaltas() {
+  const ctx = document.getElementById("graficoFaltasTrimestres");
+  const estadoFaltasContainer = document.getElementById("estadoFaltas");
+  const cardFaltas = document.getElementById("card-faltas");
+  if (!ctx) return;
+
+  if (graficoFaltas) {
+    graficoFaltas.destroy();
+  }
+
+  const processadas = obterDisciplinasProcessadas();
+
+  let faltasTri1 = 0;
+  let faltasTri2 = 0;
+  let faltasTri3 = 0;
+
+  processadas.forEach((d) => {
+    if (Array.isArray(d.faltas)) {
+      faltasTri1 += Number(d.faltas[0]) || 0;
+      faltasTri2 += Number(d.faltas[1]) || 0;
+      faltasTri3 += Number(d.faltas[2]) || 0;
+    }
+  });
+
+  const totalFaltasAcumulado = faltasTri1 + faltasTri2 + faltasTri3;
+  const REFERENCIA_INTERNA_RISCO = 350;
+
+  if (estadoFaltasContainer && cardFaltas) {
+    if (totalFaltasAcumulado >= REFERENCIA_INTERNA_RISCO) {
+      estadoFaltasContainer.innerHTML = `<span class="badge-perigo">Perigo</span>`;
+      cardFaltas.classList.add("card-perigo");
+    } else {
+      estadoFaltasContainer.innerHTML = "";
+      cardFaltas.classList.remove("card-perigo");
+    }
+  }
+
+  graficoFaltas = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["1º Tri", "2º Tri", "3º Tri"],
+      datasets: [
+        {
+          label: "Faltas",
+          data: [faltasTri1, faltasTri2, faltasTri3],
+          backgroundColor: "#f59e0b",
+          borderRadius: 6
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { color: "#8a94a6", stepSize: 1 },
+          grid: { color: "#232a34" }
+        },
+        x: {
+          ticks: { color: "#f5f7fa" },
+          grid: { display: false }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              return ` ${context.raw} faltas`;
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+function atualizarGraficos() {
+  atualizarGraficoMedias();
+  atualizarGraficoEvolucao();
+  atualizarGraficoFaltas();
 }
 
 /* ---------------------------------------------------------
@@ -283,6 +501,7 @@ function preencherCards() {
 function atualizarTela() {
   preencherCards();
   preencherTabela();
+  atualizarGraficos();
 }
 
 /* ---------------------------------------------------------
